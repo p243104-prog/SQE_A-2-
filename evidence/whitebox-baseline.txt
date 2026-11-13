@@ -1,0 +1,115 @@
+============================= test session starts ==============================
+platform linux -- Python 3.14.8, pytest-9.2.0, pluggy-1.7.0 -- /home/syed/Pictures/SQE_Assignment2_Registration_Student/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/syed/Pictures/SQE_Assignment2_Registration_Student
+plugins: cov-7.1.0
+collecting ... collected 18 items
+
+tests/test_whitebox.py::test_credit_limit_valid PASSED                   [  5%]
+tests/test_whitebox.py::test_credit_limit_exactly_18 FAILED              [ 11%]
+tests/test_whitebox.py::test_credit_limit_exceeded PASSED                [ 16%]
+tests/test_whitebox.py::test_invalid_current_credits PASSED              [ 22%]
+tests/test_whitebox.py::test_invalid_course_credits PASSED               [ 27%]
+tests/test_whitebox.py::test_no_prerequisites_required PASSED            [ 33%]
+tests/test_whitebox.py::test_all_prerequisites_completed PASSED          [ 38%]
+tests/test_whitebox.py::test_one_prerequisite_missing FAILED             [ 44%]
+tests/test_whitebox.py::test_no_prerequisites_completed PASSED           [ 50%]
+tests/test_whitebox.py::test_registration_with_available_seat PASSED     [ 55%]
+tests/test_whitebox.py::test_registration_blocked_by_one_rupee_dues FAILED [ 61%]
+tests/test_whitebox.py::test_registration_when_course_is_full FAILED     [ 66%]
+tests/test_whitebox.py::test_registration_exceeds_credit_limit PASSED    [ 72%]
+tests/test_whitebox.py::test_registration_decision_does_not_modify_objects PASSED [ 77%]
+tests/test_whitebox.py::test_successful_registration_updates_records PASSED [ 83%]
+tests/test_whitebox.py::test_failed_registration_does_not_update_records FAILED [ 88%]
+tests/test_whitebox.py::test_successful_withdrawal_updates_records FAILED [ 94%]
+tests/test_whitebox.py::test_withdrawal_when_not_registered PASSED       [100%]
+
+=================================== FAILURES ===================================
+_________________________ test_credit_limit_exactly_18 _________________________
+
+    def test_credit_limit_exactly_18():
+>       assert check_credit_limit(14, 4) is True
+E       assert False is True
+E        +  where False = check_credit_limit(14, 4)
+
+tests/test_whitebox.py:19: AssertionError
+________________________ test_one_prerequisite_missing _________________________
+
+    def test_one_prerequisite_missing():
+        completed = {"CS101"}
+        required = {"CS101", "CS102"}
+    
+>       assert prerequisites_satisfied(completed, required) is False
+E       AssertionError: assert True is False
+E        +  where True = prerequisites_satisfied({'CS101'}, {'CS101', 'CS102'})
+
+tests/test_whitebox.py:56: AssertionError
+_________________ test_registration_blocked_by_one_rupee_dues __________________
+
+    def test_registration_blocked_by_one_rupee_dues():
+        student = Student(student_id="S002", outstanding_dues=1)
+        course = Course(code="CS202", credit_hours=3, capacity=30, enrolled=10)
+    
+>       assert registration_decision(student, course) == "DUES_BLOCK"
+E       AssertionError: assert 'REGISTERED' == 'DUES_BLOCK'
+E         
+E         - DUES_BLOCK
+E         + REGISTERED
+
+tests/test_whitebox.py:78: AssertionError
+____________________ test_registration_when_course_is_full _____________________
+
+    def test_registration_when_course_is_full():
+        student = Student(student_id="S003")
+        course = Course(code="CS203", credit_hours=3, capacity=30, enrolled=30)
+    
+>       assert registration_decision(student, course) == "WAITLISTED"
+E       AssertionError: assert 'REGISTERED' == 'WAITLISTED'
+E         
+E         - WAITLISTED
+E         + REGISTERED
+
+tests/test_whitebox.py:85: AssertionError
+_______________ test_failed_registration_does_not_update_records _______________
+
+    def test_failed_registration_does_not_update_records():
+        student = Student(student_id="S007", outstanding_dues=1)
+        course = Course(code="CS302", credit_hours=3, capacity=30, enrolled=10)
+    
+        result = register_course(student, course)
+    
+>       assert result == "DUES_BLOCK"
+E       AssertionError: assert 'REGISTERED' == 'DUES_BLOCK'
+E         
+E         - DUES_BLOCK
+E         + REGISTERED
+
+tests/test_whitebox.py:129: AssertionError
+__________________ test_successful_withdrawal_updates_records __________________
+
+    def test_successful_withdrawal_updates_records():
+        student = Student(
+            student_id="S008",
+            current_credits=3,
+            registered_courses={"CS303"}
+        )
+        course = Course(code="CS303", credit_hours=3, capacity=30, enrolled=10)
+    
+        result = withdraw_course(student, course)
+    
+        assert result is True
+        assert "CS303" not in student.registered_courses
+        assert student.current_credits == 0
+>       assert course.enrolled == 9
+E       AssertionError: assert 10 == 9
+E        +  where 10 = Course(code='CS303', credit_hours=3, capacity=30, enrolled=10, prerequisites=set(), waitlist=[]).enrolled
+
+tests/test_whitebox.py:150: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_whitebox.py::test_credit_limit_exactly_18 - assert False is...
+FAILED tests/test_whitebox.py::test_one_prerequisite_missing - AssertionError...
+FAILED tests/test_whitebox.py::test_registration_blocked_by_one_rupee_dues - ...
+FAILED tests/test_whitebox.py::test_registration_when_course_is_full - Assert...
+FAILED tests/test_whitebox.py::test_failed_registration_does_not_update_records
+FAILED tests/test_whitebox.py::test_successful_withdrawal_updates_records - A...
+========================= 6 failed, 12 passed in 0.05s =========================

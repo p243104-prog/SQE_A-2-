@@ -1,0 +1,36 @@
+
+flowchart TD
+    A([Start]) --> B{D1: Dues < 0?}
+    B -- Yes --> C[Raise Invalid Dues]
+    B -- No --> D{D2-A: Enrollment invalid?}
+
+    D -- Yes --> E[Raise Invalid Capacity]
+    D -- No --> F{D2-B: Capacity < 1?}
+
+    F -- Yes --> E
+    F -- No --> G{D3: Dues > 1000?}
+
+    G -- Yes --> H[Return DUES_BLOCK]
+    G -- No --> I{D4: Already Registered?}
+
+    I -- Yes --> J[Return ALREADY_REGISTERED]
+    I -- No --> K{D5: Prerequisites Missing?}
+
+    K -- Yes --> L[Return PREREQUISITES_MISSING]
+    K -- No --> M{D6: Credit Limit Exceeded?}
+
+    M -- Yes --> N[Return CREDIT_LIMIT]
+    M -- No --> O{D7: Enrolled > Capacity?}
+
+    O -- Yes --> P[Return WAITLISTED]
+    O -- No --> Q[Return REGISTERED]
+
+    C --> R([End])
+    E --> R
+    H --> R
+    J --> R
+    L --> R
+    N --> R
+    P --> R
+    Q --> R
+

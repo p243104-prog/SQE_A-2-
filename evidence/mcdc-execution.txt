@@ -1,0 +1,12 @@
+============================= test session starts ==============================
+platform linux -- Python 3.14.8, pytest-9.2.0, pluggy-1.7.0 -- /home/syed/Pictures/SQE_Assignment2_Registration_Student/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/syed/Pictures/SQE_Assignment2_Registration_Student
+plugins: cov-7.1.0
+collecting ... collected 3 items
+
+tests/test_mcdc.py::test_mcdc_tc01_invalid_enrollment PASSED             [ 33%]
+tests/test_mcdc.py::test_mcdc_tc02_both_conditions_false PASSED          [ 66%]
+tests/test_mcdc.py::test_mcdc_tc03_invalid_capacity PASSED               [100%]
+
+============================== 3 passed in 0.02s ===============================
